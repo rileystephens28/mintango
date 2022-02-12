@@ -8,6 +8,7 @@
         "@openzeppelin/contracts": "^4.5.0",
         "@truffle/hdwallet-provider": "^2.0.0",
         "chai": "^4.3.4",
+        "dotenv": "^16.0.0",
         "truffle-plugin-verify": "^0.5.20"
     },
     "scripts": {
