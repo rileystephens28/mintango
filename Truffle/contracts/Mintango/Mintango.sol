@@ -44,7 +44,7 @@ contract Mintango is ERC1155, Ownable {
     /**
      * @dev Ensure token exists
      */
-    modifier tokenExists(uint256 _id) {
+    modifier tokenExists(uint256 tokenID) {
         require(tokenID > 0, "Mintango#tokenExists: INVALID_TOKEN_ID");
         require(
             tokenID <= _currentTokenID,
@@ -56,7 +56,7 @@ contract Mintango is ERC1155, Ownable {
     /**
      * @dev Ensure token exists
      */
-    modifier onlyNewVoters(uint256 _id) {
+    modifier onlyNewVoters(uint256 tokenID) {
         require(
             !upVoteAddresses[tokenID][msg.sender],
             "Mintango#onlyNewVoters: ACCOUNT_ALREADY_UPVOTED"
@@ -106,8 +106,8 @@ contract Mintango is ERC1155, Ownable {
     function upVote(uint256 tokenID)
         public
         noBlacklisters
-        onlyNewVoters
-        tokenExists
+        onlyNewVoters(tokenID)
+        tokenExists(tokenID)
     {
         upVoteAddresses[tokenID][msg.sender] = true;
         upVoteCount[tokenID] = upVoteCount[tokenID] + 1;
@@ -116,8 +116,8 @@ contract Mintango is ERC1155, Ownable {
     function downVote(uint256 tokenID)
         public
         noBlacklisters
-        onlyNewVoters
-        tokenExists
+        onlyNewVoters(tokenID)
+        tokenExists(tokenID)
     {
         downVoteAddresses[tokenID][msg.sender] = true;
         downVoteCount[tokenID] = downVoteCount[tokenID] + 1;
@@ -127,7 +127,7 @@ contract Mintango is ERC1155, Ownable {
         uint256 tokenID,
         address winner,
         address loser
-    ) public noBlacklisters tokenExists {
+    ) public noBlacklisters tokenExists(tokenID) {
         totalGames[tokenID] = totalGames[tokenID] + 1;
         if (winner == msg.sender) {
             wins[tokenID] = wins[tokenID] + 1;
