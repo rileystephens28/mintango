@@ -1,0 +1,21 @@
+{
+    "name": "mintango",
+    "version": "0.1.0",
+    "main": "truffle-config.js",
+    "author": "Riley Stephens",
+    "license": "MIT",
+    "dependencies": {
+        "@openzeppelin/contracts": "^4.5.0",
+        "@truffle/hdwallet-provider": "^2.0.0",
+        "chai": "^4.3.4",
+        "truffle-plugin-verify": "^0.5.20"
+    },
+    "scripts": {
+        "compile": "truffle compile --all",
+        "migrate": "truffle migrate",
+        "develop": "truffle develop",
+        "console": "truffle console",
+        "verify": "truffle run verify",
+        "test": "truffle test"
+    }
+}
