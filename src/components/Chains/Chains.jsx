@@ -88,13 +88,10 @@ function Chains() {
   const { isAuthenticated } = useMoralis();
   const [selected, setSelected] = useState({});
 
-  console.log("chain", chain);
-
   useEffect(() => {
     if (!chainId) return null;
     const newSelected = menuItems.find((item) => item.key === chainId);
     setSelected(newSelected);
-    console.log("current chainId: ", chainId);
   }, [chainId]);
 
   const handleMenuClick = (e) => {
