@@ -74,7 +74,22 @@ contract Mintango is ERC1155, Ownable {
         _;
     }
 
-    constructor() ERC1155("https://ipfs.moralis.io:2053/ipfs/{id}") {}
+    constructor() ERC1155("https://ipfs.moralis.io:2053/ipfs/") {}
+
+    /**
+     * @notice Override ERC1155 base uri function to use IPFS CIDs instead of token ids
+     * @param id ID of token to get URI for
+     * @return Correctly formatted IPFS URI for token
+     */
+    function uri(uint256 id)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
+        return string(abi.encodePacked(super.uri(id), lookupmap[id]));
+    }
 
     /**
      * @notice Prevent account from minting tokens and voting
