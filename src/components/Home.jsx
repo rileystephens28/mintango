@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Moralis from "moralis";
 import ImgCrop from 'antd-img-crop';
 import { Card, Typography, Button, Input, Upload } from "antd";
 import { useMoralis, useWeb3Contract } from "react-moralis";
@@ -15,16 +16,8 @@ export default function Minter() {
 
   const { account } = useMoralis();
   const { resolveLink, isUploading, error, moralisFile, mintNft } = useIPFS();
-  const { runContractFunction, isLoading } = useWeb3Contract({
-    functionName: "mint",
-    abi,
-    contractAddress: "0xc44a27657627A89D522F98c04C9Fa820484Af46A",
-    params: {
-      account,
-      id: 0,
-      amount: 1,
-    },
-  });
+  // const { runContractFunction, isLoading } = useWeb3Contract(
+  // });
 
   const onFileChange = ({ file: newFile }) => {
     setFile(newFile);
@@ -46,8 +39,18 @@ export default function Minter() {
   };
 
   const mintAndGo = async () => {
-    const nftCID = await mintNft(name, description, file);
-    console.log("CID", nftCID)
+    const cid = await mintNft(name, description, file);
+    console.log("CID", cid)
+    const minter = await Moralis.executeFunction({
+      functionName: "mint",
+      abi,
+      contractAddress: "0x7247d02546EA6d0f1A46403081f1874463fBE08a",
+      params: {
+        cid,
+        data: []
+      }
+    })
+    console.log("Minter", minter)
   }
 
   return (
@@ -84,7 +87,7 @@ export default function Minter() {
           shape="round"
           size="large"
           style={{ width: "100%" }}
-          loading={isLoading}
+          // loading={isLoading}
           onClick={() => mintAndGo()}
         >
           MINT ANG GO
