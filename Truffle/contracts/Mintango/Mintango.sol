@@ -4,6 +4,12 @@ pragma solidity ^0.8.11;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ * @title An ERC1155 contract for minting user generated tokens.
+ * @author Riley Stephens
+ * @notice This contract is intended to reference it's metadata on IPFS.
+ * @dev Implements black/whitelisting and on-chain ratings.
+ */
 contract Mintango is ERC1155, Ownable {
     // tracks the total number of minted tokens
     uint256 private _currentTokenID = 0;
@@ -28,7 +34,8 @@ contract Mintango is ERC1155, Ownable {
     mapping(address => bool) private whitelist;
 
     /**
-     * @dev Require msg.sender to not be blacklisted
+     * @notice Require msg.sender to not be blacklisted
+     * @dev Reverts if msg.sender is blacklisted
      */
     modifier noBlacklisters() {
         require(
@@ -39,7 +46,8 @@ contract Mintango is ERC1155, Ownable {
     }
 
     /**
-     * @dev Ensure token exists
+     * @notice Ensure token has been minted by contract
+     * @dev Reverts if token does not exist
      */
     modifier tokenExists(uint256 tokenID) {
         require(tokenID > 0, "Mintango#tokenExists: INVALID_TOKEN_ID");
@@ -51,7 +59,8 @@ contract Mintango is ERC1155, Ownable {
     }
 
     /**
-     * @dev Ensure token exists
+     * @notice Ensure msg.sender has not voted on token
+     * @dev Reverts if msg.send has already voted on token
      */
     modifier onlyNewVoters(uint256 tokenID) {
         require(
@@ -67,22 +76,43 @@ contract Mintango is ERC1155, Ownable {
 
     constructor() ERC1155("https://ipfs.moralis.io:2053/ipfs/{id}") {}
 
+    /**
+     * @notice Prevent account from minting tokens and voting
+     * @param _address The address to add to the blacklist
+     */
     function addToBlacklist(address _address) public onlyOwner {
         blacklist[_address] = true;
     }
 
+    /**
+     * @notice Allow account to mint tokens and vote again
+     * @param _address The address to remove from the blacklist
+     */
     function removeFromBlacklist(address _address) public onlyOwner {
         blacklist[_address] = false;
     }
 
+    /**
+     * @notice Exempt account from paying fee when minting tokens
+     * @param _address The address to add to the whitelist
+     */
     function addToWhitelist(address _address) public onlyOwner {
         blacklist[_address] = true;
     }
 
+    /**
+     * @notice Ensure account pays fee when minting tokens again
+     * @param _address The address to remove from the whitelist
+     */
     function removeFromWhitelist(address _address) public onlyOwner {
         blacklist[_address] = false;
     }
 
+    /**
+     * @notice Mint a new NFT for the msg.sender
+     * @param cid The CID of the token metadata on IPFS
+     * @param data Additional data to be stored with the token
+     */
     function mint(string memory cid, bytes memory data) public noBlacklisters {
         // UNCOMMENT BELOW AND ADD PAYABLE TO FUCTION DECLARATION TO ENABLE FEE
         // if (!whitelist[msg.sender]) {
@@ -99,15 +129,17 @@ contract Mintango is ERC1155, Ownable {
         lookupmap[_currentTokenID] = cid;
 
         // initialize token properties
-        wins[_currentTokenID] = 0;
-        losses[_currentTokenID] = 0;
-        totalGames[_currentTokenID] = 0;
         upVoteCount[_currentTokenID] = 0;
         downVoteCount[_currentTokenID] = 0;
 
         _mint(msg.sender, _currentTokenID, 1, data);
     }
 
+    /**
+     * @notice Count msg.sender's upvote for a token
+     * @dev Only allows one vote per account per token
+     * @param tokenID The ID of the token to upvote
+     */
     function upVote(uint256 tokenID)
         public
         noBlacklisters
@@ -118,6 +150,11 @@ contract Mintango is ERC1155, Ownable {
         upVoteCount[tokenID] = upVoteCount[tokenID] + 1;
     }
 
+    /**
+     * @notice Count msg.sender's downvote for a token
+     * @dev Only allows one vote per account per token
+     * @param tokenID The ID of the token to downvote
+     */
     function downVote(uint256 tokenID)
         public
         noBlacklisters
