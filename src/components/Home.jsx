@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import ImgCrop from 'antd-img-crop';
 import { Card, Typography, Button, Input, Upload } from "antd";
-
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { abi } from "../contracts/Mintango.json";
 import { useIPFS } from "../hooks/useIPFS";
@@ -51,11 +50,12 @@ export default function Minter() {
       <Card
         bordered={false}
         style={{
-          width: 600,
+          width: 500,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           textAlign: "center",
+          zIndex: 1,
         }}
       >
         <Typography.Title level={3}>NFT Minter</Typography.Title>

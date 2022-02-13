@@ -13,6 +13,7 @@ import NFTBalance from "components/NFTBalance";
 import NativeBalance from "components/NativeBalance";
 import Home from "components/Home";
 import MenuItems from "./components/MenuItems";
+import Background from "Background";
 import "antd/dist/antd.css";
 import "./style.css";
 
@@ -31,7 +32,7 @@ const styles = {
     position: "fixed",
     zIndex: 1,
     width: "100%",
-    background: "#fff",
+    background: "rgb(255, 255, 255, .3)",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -61,6 +62,7 @@ const App = () => {
 
   return (
     <Layout style={{ height: "100vh", overflow: "auto" }}>
+      <Background/>
       <Router>
         <Header style={styles.header}>
           <MenuItems />

@@ -15,6 +15,9 @@ function MenuItems() {
         fontWeight: "500",
         width: "100%",
         justifyContent: "center",
+        background: "transparent",
+        borderBottomWidth: 0,
+        color: "white"
       }}
       defaultSelectedKeys={[pathname]}
     >
