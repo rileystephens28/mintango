@@ -17,12 +17,9 @@ export const useIPFS = () => {
   };
 
   // Upload image to IPFS
-  const uploadImage = async (image) => {
-    const file = await saveFile(image.name, image, { saveIPFS: true })
-    console.log(file);
-    return file;
-    // console.log(file.ipfs(), file.hash())
-    // return file.ipfs()
+  const uploadImage = async (imageFile) => {
+    const file = await saveFile(imageFile.name, imageFile, { saveIPFS: true })
+    return file.ipfs();
   };
 
   // Upload metadata to IPFS
@@ -32,15 +29,19 @@ export const useIPFS = () => {
         "description": description,
         "image": imageURL
       }
-    const file = await saveFile("file.json", {base64 : Buffer.from(JSON.stringify(metadata), 'base64')});
-    console.log(file.ipfs())
-    return file;
+      
+    // const file = await saveFile("file.json", {saveIPFS: true, base64 : Buffer.from(JSON.stringify(metadata), 'base64')});
+    // const buff = Buffer.from(JSON.stringify(metadata), 'base64')
+    const buff = btoa(JSON.stringify(metadata))
+    const file = await saveFile("0x00.json", {base64: buff}, {saveIPFS: true});
+    return file.hash();
 };
 
   // Mint NFT
-  const mintNft = async () => {
-      const image = await uploadImage();
-      await uploadMetadata(image);
+  const mintNft = async (name, description, imageFile) => {
+      const image = await uploadImage(imageFile);
+      const cidHash = await uploadMetadata(name, description, image);
+      return cidHash;
   };
 
   return { resolveLink, isUploading, error, moralisFile, mintNft };

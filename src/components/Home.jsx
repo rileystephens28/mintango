@@ -45,6 +45,11 @@ export default function Minter() {
     imgWindow.document.write(image.outerHTML);
   };
 
+  const mintAndGo = async () => {
+    const nftCID = await mintNft(name, description, file);
+    console.log("CID", nftCID)
+  }
+
   return (
     <div style={{ display: "flex" }}>
       <Card
@@ -59,19 +64,20 @@ export default function Minter() {
         }}
       >
         <Typography.Title level={3}>NFT Minter</Typography.Title>
-        <Input showCount placeholder="Name" maxLength={20} onChange={setName} style={{ marginBottom: "1rem" }}/>
-        <TextArea showCount placeholder="Description..." maxLength={140} onChange={setDescription} style={{ marginBottom: "1rem"}}/>
+        <Input showCount placeholder="Name" maxLength={20} onChange={e => setName(e.target.value)} style={{ marginBottom: "1rem" }}/>
+        <TextArea showCount placeholder="Description..." maxLength={140} onChange={e => setDescription(e.target.value)} style={{ marginBottom: "1rem"}}/>
         <div style={{ marginBottom: "1rem"}}>
-            <Upload
+          <Upload
               accept="image/*"
               listType="picture-card"
-              file={file}
               onChange={onFileChange}
               onPreview={onPreview}
-              onRemove={() => setFile(null)}
+              onRemove={() => {setFile(null)}}
+              beforeUpload={() => {return false}}
             >
               {!file && '+ Upload'}
             </Upload>
+            
         </div>
         <Button
           type="primary"
@@ -79,7 +85,7 @@ export default function Minter() {
           size="large"
           style={{ width: "100%" }}
           loading={isLoading}
-          onClick={() => runContractFunction()}
+          onClick={() => mintAndGo()}
         >
           MINT ANG GO
         </Button>
