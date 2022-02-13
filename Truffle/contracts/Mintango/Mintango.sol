@@ -16,9 +16,6 @@ contract Mintango is ERC1155, Ownable {
     mapping(uint256 => string) public lookupmap;
 
     // token properties
-    mapping(uint256 => uint256) public wins;
-    mapping(uint256 => uint256) public losses;
-    mapping(uint256 => uint256) public totalGames;
     mapping(uint256 => uint256) public upVoteCount;
     mapping(uint256 => uint256) public downVoteCount;
 
@@ -74,8 +71,16 @@ contract Mintango is ERC1155, Ownable {
         blacklist[_address] = true;
     }
 
+    function removeFromBlacklist(address _address) public onlyOwner {
+        blacklist[_address] = false;
+    }
+
     function addToWhitelist(address _address) public onlyOwner {
         blacklist[_address] = true;
+    }
+
+    function removeFromWhitelist(address _address) public onlyOwner {
+        blacklist[_address] = false;
     }
 
     function mint(string memory cid, bytes memory data) public noBlacklisters {
@@ -121,18 +126,5 @@ contract Mintango is ERC1155, Ownable {
     {
         downVoteAddresses[tokenID][msg.sender] = true;
         downVoteCount[tokenID] = downVoteCount[tokenID] + 1;
-    }
-
-    function recordGame(
-        uint256 tokenID,
-        address winner,
-        address loser
-    ) public noBlacklisters tokenExists(tokenID) {
-        totalGames[tokenID] = totalGames[tokenID] + 1;
-        if (winner == msg.sender) {
-            wins[tokenID] = wins[tokenID] + 1;
-        } else {
-            losses[tokenID] = losses[tokenID] + 1;
-        }
     }
 }
