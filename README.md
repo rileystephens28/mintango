@@ -6,13 +6,13 @@
 ![top-languages-shield]
 ![languages-count-shield]
 ![status-shield]
+
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
   <!-- <a href="https://github.com/rileystephens28/mintango">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a> -->
-  <h2 align="center">Mintango</h2>
+  <h1 align="center">Mintango</h1>
   <p align="center">
     <i>ERC-1155 NFT Minting Dapp</i>
     <br />
@@ -22,6 +22,12 @@
     <a href="https://github.com/rileystephens28/mintango/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement">Request Feature</a>
   </p>
 </div>
+
+<div align="center">
+  <img src="https://github.com/rileystephens28/mintango/blob/main/demo.gif" width="80%" />
+</div>
+<br>
+<br>
 
 <!-- TABLE OF CONTENTS -->
 <details>
