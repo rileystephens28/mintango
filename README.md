@@ -37,10 +37,10 @@
         <ul><a href="#prerequisites">Prerequisites</a></ul>
         <ul><a href="#installation">Installation</a></ul>
     </li>
-     <li>
+     <!-- <li>
         <a href="#usage">Usage</a>
         <ul><a href="#erc-1155-contract">ERC-1155 Contract</a></ul>
-    </li>
+    </li> -->
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
